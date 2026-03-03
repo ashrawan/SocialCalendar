@@ -1,4 +1,11 @@
 # Build and deploy UI to GitHub Pages
+#
+# Steps to deploy:
+# 1. Push this repo to GitHub (create repo if needed).
+# 2. Settings → Pages → Source: set to "GitHub Actions".
+# 3. Push to main (or run workflow from Actions tab).
+# 4. Site will be at: https://<username>.github.io/<repo-name>/
+#
 name: Deploy to GitHub Pages
 
 on:
@@ -34,8 +41,12 @@ jobs:
       - name: Build
         run: npm run build
         env:
+          VITE_BASE_PATH: /${{ github.event.repository.name }}/
           # Optional: set if your app needs it at build time
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      - name: SPA fallback for GitHub Pages
+        run: cp dist/index.html dist/404.html
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
