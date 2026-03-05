@@ -3,7 +3,7 @@ import { X, RefreshCw, Link as LinkIcon, AlertCircle, CheckCircle2 } from 'lucid
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from '../lib/utils';
 import { Post, Platform } from '../types';
-import { format } from 'date-fns';
+import { format, parse, isValid } from 'date-fns';
 
 interface SyncPanelProps {
   isOpen: boolean;
@@ -149,13 +149,32 @@ export const SyncPanel: React.FC<SyncPanelProps> = ({ isOpen, onClose, onSync })
         const row: any = {};
         headers.forEach((h, i) => { row[h] = values[i]; });
 
+        // Normalize date to YYYY-MM-DD
+        let normalizedDate = row.date || '';
+        if (normalizedDate) {
+          const formats = ['yyyy-MM-dd', 'MM/dd/yyyy', 'dd/MM/yyyy', 'MM-dd-yyyy', 'dd-MM-yyyy', 'yyyy/MM/dd'];
+          let parsedDate: Date | null = null;
+          
+          for (const fmt of formats) {
+            const d = parse(normalizedDate, fmt, new Date());
+            if (isValid(d)) {
+              parsedDate = d;
+              break;
+            }
+          }
+          
+          if (parsedDate) {
+            normalizedDate = format(parsedDate, 'yyyy-MM-dd');
+          }
+        }
+
         // Handle both 'platform' and 'platforms' columns
         const platformsStr = row.platforms || row.platform || 'twitter';
         const platforms = platformsStr.split(/[;,]/).map((p: string) => p.trim().toLowerCase()).filter(Boolean) as Platform[];
 
         return {
           id: row.id || `import-${idx}-${Date.now()}`,
-          date: row.date || '',
+          date: normalizedDate,
           time: row.time || '09:00',
           platforms: platforms.length > 0 ? platforms : ['twitter'] as Platform[],
           content: row.content || '',
@@ -195,14 +214,14 @@ export const SyncPanel: React.FC<SyncPanelProps> = ({ isOpen, onClose, onSync })
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            className="fixed bottom-0 left-0 right-0 bg-white shadow-2xl z-50 rounded-t-[32px] p-8 max-w-2xl mx-auto"
+            className="fixed bottom-0 left-0 right-0 bg-[var(--bg-secondary)] shadow-2xl z-50 rounded-t-[32px] p-8 max-w-2xl mx-auto text-[var(--text-primary)]"
           >
             <div className="flex items-center justify-between mb-8">
               <div className="flex flex-col">
                 <h2 className="text-2xl font-serif font-bold italic">Google Sheets Sync</h2>
                 <p className="text-xs font-mono opacity-50 mt-1 uppercase tracking-widest">Link your content calendar</p>
               </div>
-              <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full">
+              <button onClick={onClose} className="p-2 hover:bg-[var(--text-primary)]/5 rounded-full">
                 <X size={24} />
               </button>
             </div>
@@ -217,12 +236,12 @@ export const SyncPanel: React.FC<SyncPanelProps> = ({ isOpen, onClose, onSync })
                     placeholder="Paste your Google Sheet URL here..."
                     value={sheetUrl}
                     onChange={(e) => setSheetUrl(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 bg-black/[0.02] border-none rounded-2xl text-sm focus:ring-2 focus:ring-black/5 placeholder:opacity-30"
+                    className="w-full pl-12 pr-4 py-4 bg-[var(--text-primary)]/[0.02] border-none rounded-2xl text-sm focus:ring-2 focus:ring-[var(--text-primary)]/5 placeholder:opacity-30 text-[var(--text-primary)]"
                   />
                 </div>
-                <div className="p-4 bg-blue-50/50 rounded-2xl border border-blue-100/50 space-y-2">
-                  <p className="text-[10px] font-bold text-blue-900 uppercase tracking-widest">How to sync:</p>
-                  <ol className="text-[10px] text-blue-800/70 space-y-1 list-decimal ml-4">
+                <div className="p-4 bg-blue-500/10 rounded-2xl border border-blue-500/20 space-y-2">
+                  <p className="text-[10px] font-bold text-blue-600 uppercase tracking-widest">How to sync:</p>
+                  <ol className="text-[10px] text-blue-600/70 space-y-1 list-decimal ml-4">
                     <li>Open your Google Sheet</li>
                     <li>Click <span className="font-bold">File &gt; Share &gt; Share with others</span></li>
                     <li>Set General access to <span className="font-bold">"Anyone with the link"</span></li>
@@ -230,7 +249,7 @@ export const SyncPanel: React.FC<SyncPanelProps> = ({ isOpen, onClose, onSync })
                   </ol>
                 </div>
                 <p className="text-[10px] opacity-40 leading-relaxed">
-                  Expected columns: <code className="bg-black/5 px-1 rounded">Date</code>, <code className="bg-black/5 px-1 rounded">Time</code>, <code className="bg-black/5 px-1 rounded">Platforms</code>, <code className="bg-black/5 px-1 rounded">Content</code>
+                  Expected columns: <code className="bg-[var(--text-primary)]/5 px-1 rounded">Date</code>, <code className="bg-[var(--text-primary)]/5 px-1 rounded">Time</code>, <code className="bg-[var(--text-primary)]/5 px-1 rounded">Platforms</code>, <code className="bg-[var(--text-primary)]/5 px-1 rounded">Content</code>
                 </p>
                 {lastSynced && (
                   <p className="text-[10px] font-mono text-emerald-600 uppercase tracking-widest">
@@ -239,7 +258,7 @@ export const SyncPanel: React.FC<SyncPanelProps> = ({ isOpen, onClose, onSync })
                 )}
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-black/[0.02] rounded-2xl">
+              <div className="flex items-center justify-between p-4 bg-[var(--text-primary)]/[0.02] rounded-2xl">
                 <div className="flex flex-col">
                   <span className="text-sm font-bold">Replace current plan</span>
                   <span className="text-[10px] opacity-40 font-mono uppercase tracking-tight">Clear local posts before sync</span>
@@ -248,19 +267,19 @@ export const SyncPanel: React.FC<SyncPanelProps> = ({ isOpen, onClose, onSync })
                   onClick={() => setReplace(!replace)}
                   className={cn(
                     "w-12 h-6 rounded-full transition-all relative",
-                    replace ? "bg-black" : "bg-black/10"
+                    replace ? "bg-[var(--text-primary)]" : "bg-[var(--text-primary)]/10"
                   )}
                 >
                   <div className={cn(
-                    "absolute top-1 w-4 h-4 rounded-full bg-white transition-all",
+                    "absolute top-1 w-4 h-4 rounded-full bg-[var(--bg-secondary)] transition-all",
                     replace ? "right-1" : "left-1"
                   )} />
                 </button>
               </div>
 
-              <div className="flex items-center justify-between p-4 bg-red-50/50 rounded-2xl border border-red-100/50">
+              <div className="flex items-center justify-between p-4 bg-red-500/10 rounded-2xl border border-red-500/20">
                 <div className="flex flex-col">
-                  <span className="text-sm font-bold text-red-900">Clear All Local Posts</span>
+                  <span className="text-sm font-bold text-red-600">Clear All Local Posts</span>
                   <span className="text-[10px] text-red-600/60 font-mono uppercase tracking-tight">Permanently delete all local data</span>
                 </div>
                 <button 
@@ -276,14 +295,14 @@ export const SyncPanel: React.FC<SyncPanelProps> = ({ isOpen, onClose, onSync })
               </div>
 
               {error && (
-                <div className="p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-xs border border-red-100">
+                <div className="p-4 bg-red-500/10 text-red-600 rounded-xl flex items-center gap-3 text-xs border border-red-500/20">
                   <AlertCircle size={16} />
                   {error}
                 </div>
               )}
 
               {status === 'success' && (
-                <div className="p-4 bg-emerald-50 text-emerald-600 rounded-xl flex items-center gap-3 text-xs border border-emerald-100">
+                <div className="p-4 bg-emerald-500/10 text-emerald-600 rounded-xl flex items-center gap-3 text-xs border border-emerald-500/20">
                   <CheckCircle2 size={16} />
                   Sync successful! Posts imported.
                 </div>
@@ -294,7 +313,7 @@ export const SyncPanel: React.FC<SyncPanelProps> = ({ isOpen, onClose, onSync })
                 disabled={status === 'syncing' || !sheetUrl}
                 className={cn(
                   "w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-xl",
-                  status === 'syncing' ? "bg-black/10 text-black/30 cursor-not-allowed" : "bg-black text-white hover:bg-neutral-800 shadow-black/10"
+                  status === 'syncing' ? "bg-[var(--text-primary)]/10 text-[var(--text-primary)]/30 cursor-not-allowed" : "bg-[var(--text-primary)] text-[var(--bg-primary)] hover:bg-neutral-800 shadow-black/10"
                 )}
               >
                 <RefreshCw size={20} className={cn(status === 'syncing' && "animate-spin")} />

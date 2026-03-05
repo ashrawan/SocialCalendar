@@ -10,7 +10,8 @@ import {
   isSameDay,
   addMonths,
   subMonths,
-  parseISO
+  parseISO,
+  isValid
 } from 'date-fns';
 import { ChevronLeft, ChevronRight, Plus, CheckCircle2 } from 'lucide-react';
 import { cn } from '../lib/utils';
@@ -55,7 +56,7 @@ export const Calendar: React.FC<CalendarProps> = ({
       // Fallback: parse and compare if formats differ slightly
       try {
         const pDate = p.date.includes('T') ? parseISO(p.date) : parseISO(`${p.date}T00:00:00`);
-        return isSameDay(pDate, day);
+        return isValid(pDate) && isSameDay(pDate, day);
       } catch {
         return false;
       }
@@ -63,14 +64,14 @@ export const Calendar: React.FC<CalendarProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full bg-[#f5f5f5] overflow-hidden">
+    <div className="flex flex-col h-full bg-[var(--bg-primary)] overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between p-8 border-b border-black/5 bg-white shrink-0">
+      <div className="flex items-center justify-between p-8 border-b border-[var(--border)] bg-[var(--bg-secondary)] shrink-0">
         <div className="flex flex-col">
-          <h1 className="text-6xl font-serif font-black tracking-tighter leading-none">
+          <h1 className="text-6xl font-serif font-black tracking-tighter leading-none text-[var(--text-primary)]">
             {format(currentDate, 'MMMM')}
           </h1>
-          <p className="text-sm font-mono uppercase tracking-widest opacity-50 mt-2">
+          <p className="text-sm font-mono uppercase tracking-widest opacity-50 mt-2 text-[var(--text-primary)]">
             {format(currentDate, 'yyyy')} Content Plan
           </p>
         </div>
@@ -78,13 +79,13 @@ export const Calendar: React.FC<CalendarProps> = ({
         <div className="flex items-center gap-4">
           <button 
             onClick={prevMonth}
-            className="p-3 hover:bg-black/5 rounded-full transition-colors border border-black/5"
+            className="p-3 hover:bg-[var(--text-primary)]/5 rounded-full transition-colors border border-[var(--border)] text-[var(--text-primary)]"
           >
             <ChevronLeft size={24} />
           </button>
           <button 
             onClick={nextMonth}
-            className="p-3 hover:bg-black/5 rounded-full transition-colors border border-black/5"
+            className="p-3 hover:bg-[var(--text-primary)]/5 rounded-full transition-colors border border-[var(--border)] text-[var(--text-primary)]"
           >
             <ChevronRight size={24} />
           </button>
@@ -92,16 +93,16 @@ export const Calendar: React.FC<CalendarProps> = ({
       </div>
 
       {/* Weekdays */}
-      <div className="grid grid-cols-7 border-b border-black/5 bg-white shrink-0">
+      <div className="grid grid-cols-7 border-b border-[var(--border)] bg-[var(--bg-secondary)] shrink-0">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
-          <div key={day} className="py-4 text-center text-[10px] font-mono uppercase tracking-[0.2em] opacity-40">
+          <div key={day} className="py-4 text-center text-[10px] font-mono uppercase tracking-[0.2em] opacity-40 text-[var(--text-primary)]">
             {day}
           </div>
         ))}
       </div>
 
       {/* Grid */}
-      <div className="grid grid-cols-7 flex-1 overflow-y-auto bg-black/5 gap-[1px]">
+      <div className="grid grid-cols-7 flex-1 overflow-y-auto bg-[var(--border)] gap-[1px]">
         {days.map((day) => {
           const dayPosts = getPostsForDay(day);
           const isCurrentMonth = isSameMonth(day, monthStart);
@@ -113,34 +114,34 @@ export const Calendar: React.FC<CalendarProps> = ({
               key={day.toString()}
               className={cn(
                 "min-h-[160px] p-4 relative group transition-all duration-300",
-                !isCurrentMonth ? "bg-black/[0.02] opacity-30" : "bg-white hover:bg-black/[0.01]"
+                !isCurrentMonth ? "bg-[var(--text-primary)]/[0.02] opacity-30" : "bg-[var(--bg-secondary)] hover:bg-[var(--text-primary)]/[0.01]"
               )}
             >
               {/* Oversized Number Background */}
               <span className={cn(
                 "absolute top-2 left-2 text-7xl font-serif font-black leading-none pointer-events-none transition-all duration-500",
-                isToday ? "text-emerald-600 opacity-[0.08]" : "opacity-[0.03] group-hover:opacity-[0.06]"
+                isToday ? "text-emerald-600 opacity-[0.08]" : "text-[var(--text-primary)] opacity-[0.03] group-hover:opacity-[0.06]"
               )}>
                 {format(day, 'd')}
               </span>
 
               <div className="relative z-10 flex flex-col h-full">
                 <div className="flex justify-between items-start mb-3">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col gap-1">
                     <span className={cn(
                       "text-sm font-mono font-bold",
-                      isToday ? "text-emerald-600" : "opacity-80"
+                      isToday ? "text-emerald-600" : "text-[var(--text-primary)] opacity-80"
                     )}>
                       {format(day, 'd')}
                     </span>
                     {dayPosts.length > 0 && (
-                      <div className="flex items-center gap-1.5">
-                        <div className="px-2 py-0.5 rounded-full bg-black/5 text-black/40 text-[8px] font-bold uppercase tracking-tighter">
-                          {dayPosts.length} posts
+                      <div className="flex flex-wrap items-center gap-1">
+                        <div className="px-1.5 py-0.5 rounded-md bg-[var(--text-primary)]/5 text-[var(--text-primary)]/40 text-[7px] font-mono uppercase tracking-tighter">
+                          {dayPosts.length} {dayPosts.length === 1 ? 'post' : 'posts'}
                         </div>
                         {publishedCount > 0 && (
-                          <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500 text-white text-[8px] font-bold uppercase tracking-tighter shadow-sm shadow-emerald-200">
-                            <CheckCircle2 size={8} />
+                          <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-500/20 text-emerald-600 text-[7px] font-mono uppercase tracking-tighter border border-emerald-500/20">
+                            <CheckCircle2 size={7} />
                             {publishedCount}
                           </div>
                         )}
@@ -151,7 +152,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                   {isCurrentMonth && (
                     <button 
                       onClick={() => onSelectDay(day)}
-                      className="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-black/5 rounded-lg transition-all"
+                      className="opacity-0 group-hover:opacity-100 p-1.5 hover:bg-[var(--text-primary)]/5 rounded-lg transition-all text-[var(--text-primary)]"
                     >
                       <Plus size={16} />
                     </button>
@@ -167,13 +168,13 @@ export const Calendar: React.FC<CalendarProps> = ({
                       className={cn(
                         "text-[10px] p-2 rounded-xl border text-left flex items-center gap-2 transition-all group/post shadow-sm",
                         post.status === 'published' 
-                          ? "bg-emerald-50 border-emerald-100 text-emerald-700 hover:bg-emerald-100" 
-                          : "bg-white border-black/5 text-black/70 hover:border-black/20"
+                          ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/20" 
+                          : "bg-[var(--bg-secondary)] border-[var(--border)] text-[var(--text-primary)]/70 hover:border-[var(--text-primary)]/20"
                       )}
                     >
                       <div className={cn(
                         "w-1.5 h-1.5 rounded-full shrink-0",
-                        post.status === 'published' ? "bg-emerald-500" : "bg-black/20"
+                        post.status === 'published' ? "bg-emerald-500" : "bg-[var(--text-primary)]/20"
                       )} />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-1 mb-0.5">
@@ -187,7 +188,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                               "w-1 h-1 rounded-full",
                               p === 'twitter' ? "bg-[#1DA1F2]" : 
                               p === 'linkedin' ? "bg-[#0077B5]" : 
-                              p === 'instagram' ? "bg-[#E4405F]" : "bg-black/20"
+                              p === 'instagram' ? "bg-[#E4405F]" : "bg-[var(--text-primary)]/20"
                             )} />
                           ))}
                         </div>
@@ -197,7 +198,7 @@ export const Calendar: React.FC<CalendarProps> = ({
                   {dayPosts.length > 4 && (
                     <button 
                       onClick={() => onSelectDay(day)}
-                      className="text-[9px] font-mono uppercase tracking-widest opacity-40 hover:opacity-100 text-center py-2 hover:bg-black/5 rounded-lg transition-all"
+                      className="text-[9px] font-mono uppercase tracking-widest opacity-40 hover:opacity-100 text-center py-2 hover:bg-[var(--text-primary)]/5 rounded-lg transition-all text-[var(--text-primary)]"
                     >
                       + {dayPosts.length - 4} more
                     </button>

@@ -83,14 +83,14 @@ export const SampleGenerator: React.FC<SampleGeneratorProps> = ({ isOpen, onClos
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
-            className="fixed bottom-0 left-0 right-0 bg-white shadow-2xl z-[70] rounded-t-[32px] p-8 max-w-2xl mx-auto"
+            className="fixed bottom-0 left-0 right-0 bg-[var(--bg-secondary)] shadow-2xl z-[70] rounded-t-[32px] p-8 max-w-2xl mx-auto text-[var(--text-primary)]"
           >
             <div className="flex items-center justify-between mb-8">
               <div className="flex flex-col">
                 <h2 className="text-2xl font-serif font-bold italic">AI Content Generator</h2>
                 <p className="text-xs font-mono opacity-50 mt-1 uppercase tracking-widest">Generate a sample plan with Gemini</p>
               </div>
-              <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full">
+              <button onClick={onClose} className="p-2 hover:bg-[var(--text-primary)]/5 rounded-full">
                 <X size={24} />
               </button>
             </div>
@@ -103,26 +103,26 @@ export const SampleGenerator: React.FC<SampleGeneratorProps> = ({ isOpen, onClos
                   placeholder="Describe your brand or campaign..."
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  className="w-full px-4 py-4 bg-black/[0.02] border-none rounded-2xl text-sm focus:ring-2 focus:ring-black/5 resize-none placeholder:opacity-30"
+                  className="w-full px-4 py-4 bg-[var(--text-primary)]/[0.02] border-none rounded-2xl text-sm focus:ring-2 focus:ring-[var(--text-primary)]/5 resize-none placeholder:opacity-30 text-[var(--text-primary)]"
                 />
               </div>
 
               {error && (
-                <div className="p-4 bg-red-50 text-red-600 rounded-xl flex items-center gap-3 text-xs border border-red-100">
+                <div className="p-4 bg-red-500/10 text-red-600 rounded-xl flex items-center gap-3 text-xs border border-red-500/20">
                   <AlertCircle size={16} />
                   {error}
                 </div>
               )}
 
               {status === 'success' && (
-                <div className="p-4 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-between text-xs border border-emerald-100">
+                <div className="p-4 bg-emerald-500/10 text-emerald-600 rounded-xl flex items-center justify-between text-xs border border-emerald-500/20">
                   <div className="flex items-center gap-3">
                     <CheckCircle2 size={16} />
                     Sample plan generated and added to your calendar!
                   </div>
                   <button 
                     onClick={handleExport}
-                    className="p-2 hover:bg-emerald-100 rounded-lg transition-all"
+                    className="p-2 hover:bg-emerald-500/10 rounded-lg transition-all"
                     title="Download as Excel"
                   >
                     <Download size={18} />
@@ -136,7 +136,7 @@ export const SampleGenerator: React.FC<SampleGeneratorProps> = ({ isOpen, onClos
                   disabled={status === 'generating'}
                   className={cn(
                     "w-full py-4 rounded-2xl font-bold flex items-center justify-center gap-3 transition-all shadow-xl",
-                    status === 'generating' ? "bg-black/10 text-black/30 cursor-not-allowed" : "bg-black text-white hover:bg-neutral-800 shadow-black/10"
+                    status === 'generating' ? "bg-[var(--text-primary)]/10 text-[var(--text-primary)]/30 cursor-not-allowed" : "bg-[var(--text-primary)] text-[var(--bg-primary)] hover:bg-neutral-800 shadow-black/10"
                   )}
                 >
                   <Sparkles size={20} className={cn(status === 'generating' && "animate-pulse")} />

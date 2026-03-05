@@ -27,10 +27,10 @@ export const ListView: React.FC<ListViewProps> = ({ posts, onEditPost }) => {
   };
 
   return (
-    <div className="flex-1 overflow-auto bg-[#f5f5f5] p-4 md:p-8">
+    <div className="flex-1 overflow-auto bg-[var(--bg-primary)] p-4 md:p-8 transition-colors duration-300">
       <div className="max-w-4xl mx-auto space-y-4">
         {sortedPosts.length === 0 ? (
-          <div className="text-center py-20 opacity-30">
+          <div className="text-center py-20 opacity-30 text-[var(--text-primary)]">
             <CalendarIcon size={48} className="mx-auto mb-4" />
             <p className="font-serif italic text-xl">No posts scheduled yet.</p>
           </div>
@@ -40,12 +40,12 @@ export const ListView: React.FC<ListViewProps> = ({ posts, onEditPost }) => {
               layoutId={post.id}
               key={post.id}
               onClick={() => onEditPost(post)}
-              className="bg-white rounded-2xl p-5 md:p-6 border border-black/5 hover:border-black/10 transition-all cursor-pointer group shadow-sm hover:shadow-md overflow-hidden"
+              className="bg-[var(--bg-secondary)] rounded-2xl p-5 md:p-6 border border-[var(--border)] hover:border-[var(--text-primary)]/10 transition-all cursor-pointer group shadow-sm hover:shadow-md overflow-hidden text-[var(--text-primary)]"
             >
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 md:gap-6">
                 <div className="flex items-start md:items-center gap-4 md:gap-6 flex-1 min-w-0">
                   {/* Date Badge */}
-                  <div className="flex flex-col items-center justify-center min-w-[50px] h-[50px] md:min-w-[60px] md:h-[60px] bg-black/5 rounded-xl shrink-0">
+                  <div className="flex flex-col items-center justify-center min-w-[50px] h-[50px] md:min-w-[60px] md:h-[60px] bg-[var(--text-primary)]/5 rounded-xl shrink-0">
                     <span className="text-[9px] md:text-[10px] font-mono uppercase opacity-50">{format(parseISO(post.date), 'MMM')}</span>
                     <span className="text-lg md:text-xl font-serif font-black">{format(parseISO(post.date), 'dd')}</span>
                   </div>
@@ -77,12 +77,14 @@ export const ListView: React.FC<ListViewProps> = ({ posts, onEditPost }) => {
                 <div className="flex items-center justify-between md:justify-end gap-4 shrink-0">
                   <div className={cn(
                     "px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-widest flex items-center gap-2",
-                    post.status === 'published' ? "bg-emerald-50 text-emerald-600 border border-emerald-100" : "bg-blue-50 text-blue-600 border border-blue-100"
+                    post.status === 'published' 
+                      ? "bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" 
+                      : "bg-blue-500/10 text-blue-600 border border-blue-500/20"
                   )}>
                     {post.status === 'published' && <CheckCircle2 size={10} />}
                     {post.status}
                   </div>
-                  <button className="p-2 md:opacity-0 group-hover:opacity-100 hover:bg-black/5 rounded-full transition-all">
+                  <button className="p-2 md:opacity-0 group-hover:opacity-100 hover:bg-[var(--text-primary)]/5 rounded-full transition-all">
                     <MoreHorizontal size={18} />
                   </button>
                 </div>

@@ -85,13 +85,13 @@ export const PostEditor: React.FC<PostEditorProps> = ({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-white shadow-2xl z-50 flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-md bg-[var(--bg-secondary)] shadow-2xl z-50 flex flex-col text-[var(--text-primary)]"
           >
-            <div className="p-6 border-b border-black/5 flex items-center justify-between">
+            <div className="p-6 border-b border-[var(--border)] flex items-center justify-between">
               <h2 className="text-xl font-serif font-bold italic">
                 {formData.id ? 'Edit Post' : 'New Post'}
               </h2>
-              <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full">
+              <button onClick={onClose} className="p-2 hover:bg-[var(--text-primary)]/5 rounded-full">
                 <X size={20} />
               </button>
             </div>
@@ -108,7 +108,7 @@ export const PostEditor: React.FC<PostEditorProps> = ({
                       required
                       value={formData.date || ''}
                       onChange={(e) => setFormData({ ...formData, date: e.target.value })}
-                      className="w-full pl-9 pr-4 py-3 bg-black/[0.02] border-none rounded-xl text-sm focus:ring-2 focus:ring-black/5"
+                      className="w-full pl-9 pr-4 py-3 bg-[var(--text-primary)]/[0.02] border-none rounded-xl text-sm focus:ring-2 focus:ring-[var(--text-primary)]/5 text-[var(--text-primary)]"
                     />
                   </div>
                 </div>
@@ -121,7 +121,7 @@ export const PostEditor: React.FC<PostEditorProps> = ({
                       required
                       value={formData.time || '09:00'}
                       onChange={(e) => setFormData({ ...formData, time: e.target.value })}
-                      className="w-full pl-9 pr-4 py-3 bg-black/[0.02] border-none rounded-xl text-sm focus:ring-2 focus:ring-black/5"
+                      className="w-full pl-9 pr-4 py-3 bg-[var(--text-primary)]/[0.02] border-none rounded-xl text-sm focus:ring-2 focus:ring-[var(--text-primary)]/5 text-[var(--text-primary)]"
                     />
                   </div>
                 </div>
@@ -136,7 +136,7 @@ export const PostEditor: React.FC<PostEditorProps> = ({
                   placeholder="What's the plan?"
                   value={formData.content || ''}
                   onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  className="w-full px-4 py-4 bg-black/[0.02] border-none rounded-2xl text-sm focus:ring-2 focus:ring-black/5 resize-none placeholder:opacity-30"
+                  className="w-full px-4 py-4 bg-[var(--text-primary)]/[0.02] border-none rounded-2xl text-sm focus:ring-2 focus:ring-[var(--text-primary)]/5 resize-none placeholder:opacity-30 text-[var(--text-primary)]"
                 />
               </div>
 
@@ -152,8 +152,8 @@ export const PostEditor: React.FC<PostEditorProps> = ({
                       className={cn(
                         "flex-1 py-3 rounded-xl border text-[10px] font-mono uppercase tracking-widest transition-all",
                         formData.status === s 
-                          ? "bg-black text-white border-black shadow-lg" 
-                          : "bg-white border-black/5 hover:border-black/20"
+                          ? "bg-[var(--text-primary)] text-[var(--bg-primary)] border-[var(--text-primary)] shadow-lg" 
+                          : "bg-[var(--bg-secondary)] border-[var(--border)] hover:border-[var(--text-primary)]/20"
                       )}
                     >
                       {s}
@@ -176,15 +176,15 @@ export const PostEditor: React.FC<PostEditorProps> = ({
                         className={cn(
                           "p-3 rounded-xl border text-xs font-medium transition-all flex items-center gap-3",
                           isSelected 
-                            ? "border-black bg-black text-white shadow-lg" 
-                            : "border-black/5 hover:border-black/20 bg-white"
+                            ? "border-[var(--text-primary)] bg-[var(--text-primary)] text-[var(--bg-primary)] shadow-lg" 
+                            : "border-[var(--border)] hover:border-[var(--text-primary)]/20 bg-[var(--bg-secondary)]"
                         )}
                       >
                         <div className={cn(
                           "w-4 h-4 rounded border flex items-center justify-center transition-colors",
-                          isSelected ? "bg-white border-white" : "border-black/20"
+                          isSelected ? "bg-[var(--bg-primary)] border-[var(--bg-primary)]" : "border-[var(--text-primary)]/20"
                         )}>
-                          {isSelected && <Check size={12} className="text-black" />}
+                          {isSelected && <Check size={12} className="text-[var(--text-primary)]" />}
                         </div>
                         <span>{p.label}</span>
                       </button>
@@ -194,7 +194,7 @@ export const PostEditor: React.FC<PostEditorProps> = ({
               </div>
             </form>
 
-            <div className="p-6 border-t border-black/5 flex gap-3">
+            <div className="p-6 border-t border-[var(--border)] flex gap-3">
               {formData.id && (
                 <button 
                   type="button"
@@ -204,14 +204,14 @@ export const PostEditor: React.FC<PostEditorProps> = ({
                       onClose();
                     }
                   }}
-                  className="p-3 text-red-500 hover:bg-red-50 rounded-xl transition-colors"
+                  className="p-3 text-red-500 hover:bg-red-500/10 rounded-xl transition-colors"
                 >
                   <Trash2 size={20} />
                 </button>
               )}
               <button 
                 onClick={handleSubmit}
-                className="flex-1 bg-black text-white py-3 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-neutral-800 transition-all shadow-xl shadow-black/10"
+                className="flex-1 bg-[var(--text-primary)] text-[var(--bg-primary)] py-3 rounded-xl font-medium flex items-center justify-center gap-2 hover:bg-neutral-800 transition-all shadow-xl shadow-black/10"
               >
                 <Save size={18} />
                 Save Post

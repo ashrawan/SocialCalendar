@@ -80,28 +80,30 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-white shadow-2xl z-[70] flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-lg bg-[var(--bg-secondary)] shadow-2xl z-[70] flex flex-col text-[var(--text-primary)]"
           >
-            <div className="p-8 border-b border-black/5 bg-white shrink-0">
+            <div className="p-8 border-b border-[var(--border)] bg-[var(--bg-secondary)] shrink-0">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex flex-col">
                   <h2 className="text-3xl font-serif font-black italic tracking-tight">Workspace</h2>
                   <p className="text-[10px] font-mono opacity-50 mt-1 uppercase tracking-widest">Configuration & History</p>
                 </div>
-                <button onClick={onClose} className="p-2 hover:bg-black/5 rounded-full transition-colors">
+                <button onClick={onClose} className="p-2 hover:bg-[var(--text-primary)]/5 rounded-full transition-colors">
                   <X size={24} />
                 </button>
               </div>
 
               {/* Tabs */}
-              <div className="flex p-1 bg-black/5 rounded-2xl">
+              <div className="flex p-1 bg-[var(--text-primary)]/5 rounded-2xl">
                 {tabs.map((tab) => (
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
                       "flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-[10px] font-mono uppercase tracking-widest transition-all",
-                      activeTab === tab.id ? "bg-white text-black shadow-sm" : "text-black/40 hover:text-black/60"
+                      activeTab === tab.id 
+                        ? "bg-[var(--bg-secondary)] text-[var(--text-primary)] shadow-sm" 
+                        : "text-[var(--text-primary)]/40 hover:text-[var(--text-primary)]/60"
                     )}
                   >
                     <tab.icon size={14} />
@@ -136,7 +138,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             placeholder="Enter your API key"
                             value={apiKey}
                             onChange={(e) => setApiKey(e.target.value)}
-                            className="w-full px-5 py-4 bg-black/[0.02] border border-black/5 rounded-2xl text-sm focus:ring-2 focus:ring-black/5 transition-all"
+                            className="w-full px-5 py-4 bg-[var(--text-primary)]/[0.02] border border-[var(--border)] rounded-2xl text-sm focus:ring-2 focus:ring-[var(--text-primary)]/5 transition-all text-[var(--text-primary)]"
                           />
                         </div>
 
@@ -149,7 +151,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                                 onClick={() => { setModel(m); setIsCustom(false); }}
                                 className={cn(
                                   "p-4 rounded-2xl border text-xs font-medium text-left transition-all flex items-center justify-between",
-                                  !isCustom && model === m ? "bg-black text-white border-black shadow-lg" : "bg-white border-black/5 hover:bg-black/5"
+                                  !isCustom && model === m 
+                                    ? "bg-[var(--text-primary)] text-[var(--bg-primary)] border-[var(--text-primary)] shadow-lg" 
+                                    : "bg-[var(--bg-secondary)] border-[var(--border)] hover:bg-[var(--text-primary)]/5"
                                 )}
                               >
                                 {m}
@@ -160,7 +164,9 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                               onClick={() => setIsCustom(true)}
                               className={cn(
                                 "p-4 rounded-2xl border text-xs font-medium text-left transition-all flex items-center justify-between",
-                                isCustom ? "bg-black text-white border-black shadow-lg" : "bg-white border-black/5 hover:bg-black/5"
+                                isCustom 
+                                  ? "bg-[var(--text-primary)] text-[var(--bg-primary)] border-[var(--text-primary)] shadow-lg" 
+                                  : "bg-[var(--bg-secondary)] border-[var(--border)] hover:bg-[var(--text-primary)]/5"
                               )}
                             >
                               Custom Model Name
@@ -176,7 +182,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                               placeholder="e.g. gemini-1.5-pro"
                               value={customModel}
                               onChange={(e) => setCustomModel(e.target.value)}
-                              className="w-full px-5 py-4 bg-black/[0.02] border border-black/5 rounded-2xl text-sm focus:ring-2 focus:ring-black/5 transition-all"
+                              className="w-full px-5 py-4 bg-[var(--text-primary)]/[0.02] border border-[var(--border)] rounded-2xl text-sm focus:ring-2 focus:ring-[var(--text-primary)]/5 transition-all text-[var(--text-primary)]"
                             />
                           )}
                         </div>
@@ -202,7 +208,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                       
                       <div className="space-y-3">
                         {savedPlans.length === 0 ? (
-                          <div className="p-8 border border-dashed border-black/10 rounded-[32px] text-center opacity-30">
+                          <div className="p-8 border border-dashed border-[var(--border)] rounded-[32px] text-center opacity-30">
                             <p className="text-xs font-mono">No generated plans saved yet.</p>
                           </div>
                         ) : (
@@ -210,7 +216,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             {savedPlans.map((plan) => (
                               <div 
                                 key={plan.id}
-                                className="p-4 bg-black/[0.02] border border-black/5 rounded-2xl flex items-center justify-between group"
+                                className="p-4 bg-[var(--text-primary)]/[0.02] border border-[var(--border)] rounded-2xl flex items-center justify-between group"
                               >
                                 <div className="flex flex-col">
                                   <span className="text-sm font-bold truncate max-w-[200px]">{plan.name}</span>
@@ -218,7 +224,7 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                                 </div>
                                 <button 
                                   onClick={() => onDeletePlan(plan.id)}
-                                  className="p-2 text-red-500 hover:bg-red-50 rounded-xl opacity-0 group-hover:opacity-100 transition-all"
+                                  className="p-2 text-red-500 hover:bg-red-500/10 rounded-xl md:opacity-0 group-hover:opacity-100 transition-all"
                                 >
                                   <Trash2 size={16} />
                                 </button>
@@ -254,23 +260,23 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
                             placeholder="https://script.google.com/macros/s/.../exec"
                             value={sheetWebhook}
                             onChange={(e) => setSheetWebhook(e.target.value)}
-                            className="w-full px-5 py-4 bg-black/[0.02] border border-black/5 rounded-2xl text-sm focus:ring-2 focus:ring-black/5 transition-all"
+                            className="w-full px-5 py-4 bg-[var(--text-primary)]/[0.02] border border-[var(--border)] rounded-2xl text-sm focus:ring-2 focus:ring-[var(--text-primary)]/5 transition-all text-[var(--text-primary)]"
                           />
                         </div>
                         
-                        <div className="p-5 bg-emerald-50 rounded-3xl border border-emerald-100 space-y-3">
-                          <div className="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase tracking-widest">
+                        <div className="p-5 bg-emerald-500/10 rounded-3xl border border-emerald-500/20 space-y-3">
+                          <div className="flex items-center gap-2 text-emerald-600 font-bold text-xs uppercase tracking-widest">
                             <Info size={14} />
                             How to sync back?
                           </div>
-                          <p className="text-[10px] text-emerald-800/70 leading-relaxed">
+                          <p className="text-[10px] text-emerald-600/70 leading-relaxed">
                             To sync changes back to Google Sheets, you can use a simple Google Apps Script that receives POST requests. 
                             When you update a post, the app can "push" the change to your script.
                           </p>
                           <a 
                             href="https://developers.google.com/apps-script/guides/web" 
                             target="_blank" 
-                            className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 hover:underline"
+                            className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 hover:underline"
                           >
                             Learn about Web Apps <ExternalLink size={10} />
                           </a>
@@ -282,12 +288,12 @@ export const SettingsPanel: React.FC<SettingsPanelProps> = ({
               </AnimatePresence>
             </div>
 
-            <div className="p-8 border-t border-black/5 bg-white shrink-0">
+            <div className="p-8 border-t border-[var(--border)] bg-[var(--bg-secondary)] shrink-0">
               <button 
                 onClick={handleSave}
                 className={cn(
                   "w-full py-5 rounded-[24px] font-bold flex items-center justify-center gap-3 transition-all shadow-2xl",
-                  saved ? "bg-emerald-500 text-white" : "bg-black text-white hover:bg-neutral-800 shadow-black/20"
+                  saved ? "bg-emerald-500 text-white" : "bg-[var(--text-primary)] text-[var(--bg-primary)] hover:bg-neutral-800 shadow-black/20"
                 )}
               >
                 {saved ? (
