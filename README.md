@@ -2,6 +2,12 @@
 
 A calendar app for planning and managing social media posts. View by calendar or list, edit posts, sync with Google Sheets, and use AI to generate content.
 
+## Screenshots
+
+| Light | Dark |
+|:-----:|:----:|
+| ![Light mode](docs/light.png) | ![Dark mode](docs/dark.png) |
+
 ## Run locally
 
 - **Prerequisites:** Node.js
